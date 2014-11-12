@@ -1,0 +1,152 @@
+<html>
+
+<head>
+<script src="../../re4/debug/definitive-log.js"></script>
+<script>
+log.options.debugEnabled=true;
+window.debug=function(args)
+{
+	var stack=args[0];
+	var msg=args[1];
+	log.debug(stack,{_2stack:stack,_1msg:msg});
+}
+</script>
+<style>
+	#debug_log { /* Styles for our debug message container */
+	background-color: #aaa; /* gray background */
+	border: solid black 2px; /* black border */
+	overflow: auto; /* scrollbars */
+	width: 100%; /* not as wide as full window */
+	height: 800px; /* don't take up too much vertical space */
+	}
+	#debug_log:before { /* Give our logging area a title */
+	content: "Debugging Messages";
+	display: block;
+	text-align: center;
+	font: bold 18pt sans-serif ;
+	}
+	.debug_message { /* Place a thin black line between debug messages */
+	border-bottom: solid black 1px;
+	}
+</style>
+
+<title></title>
+	
+
+
+
+</script>
+
+</head>
+
+<body>
+
+	<script  src="../../re4/fw/fw.js"></script>
+
+	<script src="../../re4/vm/vm.js"></script>
+
+	<script src="../../re4/vm/screen.js"></script>
+	<script src="../../re4/vm/color.js"></script>
+
+	<script src="../../re4/math/math.js"></script>
+	<script src="../../re4/math/vector.js"></script>
+	<script src="../../re4/math/point.js"></script>
+	<script src="../../re4/math/matrix.js"></script>
+
+	<script src="../../re4/wire/wire.js"></script>
+	<script src="../../re4/wire/poly.js"></script>
+	<script src="../../re4/wire/list.js"></script>
+
+
+re4 test:<script>document.write(new Date());</script>
+<br />
+	<div id="test"></div>
+	<img id="manual" />
+	<input type="button" onclick="clearInterval(interval)" value="stop"/>
+	<script >
+	try
+	{
+		/*
+		var con=document.getElementById("test");
+		var win=new re4.vm.Screen(con,20,20);
+		win.drawPoint ( 13 ,17, new re4.vm.Color(255,0,0) ,re4.vm.Screen.BUFFER_SELECT.PRIMARY);
+		
+		var grid=new Array(100);
+		for(var i=0;i<grid.length;i++)
+		{
+			grid[i]=new Array(100);
+			for(var j=0;j<grid[i].length;j++)
+			{
+				if(i==5 && j==5)
+				{
+					grid[i][j]=[255,0,0];
+				}
+				else
+				{
+					grid[i][j]=[0,0,0];
+				}
+				
+			}
+		}
+		*/
+		//re4.fw.debug(new Error(),grid);
+		//bmp_lib.render('manual', grid,null);
+		//win.drawPoint ( 100 ,151, new re4.vm.Color(255,0,0) ,re4.vm.Screen.BUFFER_SELECT.PRIMARY);
+		//win.drawPoint ( 100 ,152, new re4.vm.Color(255,0,0) ,re4.vm.Screen.BUFFER_SELECT.PRIMARY);
+		/*
+		var disX=100;
+		var disY=100;
+		var p2d=new re4.math.Point4D(0,-50,0,1);
+		var angZ=1;
+		win.drawLine (100 ,100,50,110,new re4.vm.Color(0,255,0) ,re4.vm.Screen.BUFFER_SELECT.SECONDARY);
+		win.flipDisplay();
+		function round()
+		{
+			angZ=(angZ+0.1)%(re4.math.PI*2);
+			var m=re4.math.Matrix4X4.buildRotationXYZ(0,0,angZ);
+			var newp=m.mulByVector(p2d);
+			win.fillSecondary ( new re4.vm.Color(0,0,0));
+			win.drawLine (disX ,disY,newp.getX()+disX,newp.getY()+disY,new re4.vm.Color(0,255,0) ,re4.vm.Screen.BUFFER_SELECT.SECONDARY);
+			win.flipDisplay();
+		}
+		var interval=setInterval(round,1000);
+		round();
+		*/
+		var grid=new Array(10);
+		for(var i=0;i<grid.length;i++)
+		{
+			grid[i]=new Array(10);
+			for(var j=0;j<grid[i].length;j++)
+			{
+				if(i==5 && j==5)
+				{
+					grid[i][j]='ff0000';
+				}
+				else
+				{
+					grid[i][j]='000000';
+				}
+				
+			}
+		}
+
+		var greys = bmp_rgb(10, 10, grid);
+		document.write(greys);
+		var uri=datauri("image/bmp",greys );
+		document.write(uri);
+		document.getElementById("img_hack").src=uri;
+		re4.fw.debug(new Error(),grid);
+	}
+	catch (e)
+	{
+		re4.fw.debug(e,"single-3d-triangle debug");
+		throw e;
+	}
+		
+	</script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,96 @@
+<html>
+
+<head>
+<script src="../../re4/debug/definitive-log.js"></script>
+<script>
+log.options.debugEnabled=true;
+window.debug=function(args)
+{
+	var stack=args[0];
+	var msg=args[1];
+	log.debug(stack,{_2stack:stack,_1msg:msg});
+}
+</script>
+<style>
+	#debug_log { /* Styles for our debug message container */
+	background-color: #aaa; /* gray background */
+	border: solid black 2px; /* black border */
+	overflow: auto; /* scrollbars */
+	width: 100%; /* not as wide as full window */
+	height: 800px; /* don't take up too much vertical space */
+	}
+	#debug_log:before { /* Give our logging area a title */
+	content: "Debugging Messages";
+	display: block;
+	text-align: center;
+	font: bold 18pt sans-serif ;
+	}
+	.debug_message { /* Place a thin black line between debug messages */
+	border-bottom: solid black 1px;
+	}
+</style>
+
+<title></title>
+	
+
+
+
+</script>
+
+</head>
+
+<body>
+
+	<script  src="../../re4/fw/fw.js"></script>
+
+	<script src="../../re4/vm/vm.js"></script>
+
+	<script src="../../re4/vm/screen.js"></script>
+	<script src="../../re4/vm/color.js"></script>
+
+	<script src="../../re4/math/math.js"></script>
+	<script src="../../re4/math/vector.js"></script>
+	<script src="../../re4/math/point.js"></script>
+	<script src="../../re4/math/matrix.js"></script>
+
+	<script src="../../re4/wire/wire.js"></script>
+	<script src="../../re4/wire/poly.js"></script>
+	<script src="../../re4/wire/list.js"></script>
+
+
+re4 test:<script>document.write(new Date());</script>
+<br />
+	<div id="con"></div>
+	<input type="button" onclick="clearInterval(interval)" value="stop"/>
+	<script >
+	try
+	{
+		/*
+		var con=document.getElementById("manual");
+		var region=new re4.vm.Screen._Region(con,15,7,new re4.vm.Color(0 ,255,0));
+		region.reDraw();
+		*/
+		var screen=new 	re4.vm.Screen(document.getElementById("con"),321,123);
+		screen.fillPrimary (new re4.vm.Color(0,0,255));
+		screen.fillSecondary (new re4.vm.Color(0,255,0));
+		screen.flipDisplay ( );
+		screen.drawPoint (320 ,122,new re4.vm.Color(255,0,0),re4.vm.Screen.BUFFER_SELECT.SECONDARY);
+		screen.flipDisplay ( );
+		screen.drawLine (0,122 ,320,0,new re4.vm.Color(255,0,0),re4.vm.Screen.BUFFER_SELECT.PRIMARY);
+		screen.drawLine (0,122 ,320,0,new re4.vm.Color(255,0,0),re4.vm.Screen.BUFFER_SELECT.SECONDARY);
+		screen.drawLine  (0,10,0,112,new re4.vm.Color(255,0,0), re4.vm.Screen.BUFFER_SELECT.SECONDARY);
+		 screen.flipDisplay();
+	}
+	catch (e)
+	{
+		re4.fw.debug(e,"single-3d-triangle debug");
+		throw e;
+	}
+		
+	</script>
+
+
+
+</body>
+
+</html>

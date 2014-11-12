@@ -1,0 +1,171 @@
+<html>
+
+<head>
+<script src="../../re4/debug/definitive-log.js"></script>
+<script>
+log.options.debugEnabled=true;
+window.debug=function(args)
+{
+	var stack=args[0];
+	var msg=args[1];
+	log.debug(stack,{_2stack:stack,_1msg:msg});
+}
+</script>
+<style>
+	#debug_log { /* Styles for our debug message container */
+	background-color: #aaa; /* gray background */
+	border: solid black 2px; /* black border */
+	overflow: auto; /* scrollbars */
+	width: 100%; /* not as wide as full window */
+	height: 800px; /* don't take up too much vertical space */
+	}
+	#debug_log:before { /* Give our logging area a title */
+	content: "Debugging Messages";
+	display: block;
+	text-align: center;
+	font: bold 18pt sans-serif ;
+	}
+	.debug_message { /* Place a thin black line between debug messages */
+	border-bottom: solid black 1px;
+	}
+</style>
+
+<title></title>
+	
+
+
+
+</script>
+
+</head>
+
+<body>
+
+	<script  src="../../re4/fw/fw.js"></script>
+
+	<script src="../../re4/vm/vm.js"></script>
+
+	<script src="../../re4/vm/screen.js"></script>
+	<script src="../../re4/vm/color.js"></script>
+
+	<script src="../../re4/math/math.js"></script>
+	<script src="../../re4/math/vector.js"></script>
+	<script src="../../re4/math/point.js"></script>
+	<script src="../../re4/math/matrix.js"></script>
+	<script src="../../re4/math/plane.js"></script>
+
+	<script src="../../re4/wire/wire.js"></script>
+	<script src="../../re4/wire/poly.js"></script>
+	<script src="../../re4/wire/list.js"></script>
+	<script src="../../re4/wire/camera.js"></script>
+
+re4 test:<script>document.write(new Date());</script>
+<br />
+	<div id="test"></div>
+	<div id="rot_count"></div>
+	<input type="button" onclick="clearInterval(interval)" value="stop"/>
+	<script >
+	try
+	{
+		var triPos=new re4.math.Vector4D(0,0,1500,1);
+		var camPos=new re4.math.Vector4D(0,0,-100,1);
+		var degZ=10;
+		var rotCount=0;
+		
+		var p1=new re4.math.Point4D(0,100,0,1);
+		//re4.fw.debug(new Error(),p1);
+		var p2=new re4.math.Point4D(100,-100,0,1);
+		//re4.fw.debug(new Error(),p2);
+		var p3=new re4.math.Point4D(-100,-100,0,1);
+		//re4.fw.debug(new Error(),p3);
+		var vlist=new Array();
+		vlist[0]=p1;
+		vlist[1]=p2;
+		vlist[2]=p3;
+		var tri=new re4.wire.Poly4DSelf(re4.wire.Poly4D.STATE.ACTIVE, re4.wire.Poly4D.ATTRIBUTE.EMPTY,"00ff00",vlist,null,null);		
+		
+		//re4.fw.debug(new Error(),tri);
+		var list=new re4.wire.RenderList4D(re4.wire.Poly4D.STATE.ACTIVE,re4.wire.Poly4D.ATTRIBUTE.EMPTY,[tri],1);
+		//re4.fw.debug(new Error(),"origin");
+		//re4.fw.debug(new Error(),list);
+		
+		var camDir=new re4.math.Vector4D(0,0,0,1);
+		var cam=new re4.wire.Camera4D ( re4.wire.Camera4D.ATTRIBUTE.EULER_MODEL , camPos ,camDir,null ,50,500,90,200,200);
+		cam.buildMatrixEulerThis(re4.wire.Camera4D.ROT_SEQ.YXZ);
+		re4.fw.debug(new Error(),cam.getMcam());
+		cam.buildMatrixEulerThis(re4.wire.Camera4D.ROT_SEQ.XYZ);
+		re4.fw.debug(new Error(),cam.getMcam());
+		//re4.fw.debug(new Error(),cam);
+		var con=document.getElementById("test");
+		var screen=new re4.vm.Screen(con,cam.getViewPortWidth(),cam.getViewPortHeight());
+		
+		
+		function main()
+		{
+			screen.fillSecondary("000000");
+			screen.flipDisplay ( );
+			if(triPos.getZ()>-50)
+			{
+				triPos.setZ(triPos.getZ()-10);
+			}
+			var mrot=re4.math.Matrix4X4.buildRotationXYZ(0,re4.math.degree2Radian(degZ),0);
+			//degZ=(degZ+1)%360;
+			//re4.fw.debug(new Error(),mrot);
+			rotCount++;
+			list.transformThis(mrot, re4.wire.TRANS_COORD.LOCAL_ONLY);
+			document.getElementById("rot_count").innerHTML=rotCount+" X "+degZ+" degrees";
+			//re4.fw.debug(new Error(),"transformed:");
+			//re4.fw.debug(new Error(),list);
+			
+			/*
+			if(rotCount==18)
+			{
+				rotCount=0;
+				if(triPos.getY()<100)
+				{
+					triPos.setY(triPos.getY()+10);
+				}
+			}
+			*/
+			
+			//alert(triPos.getZ());
+
+			list.modelToWorldThis(triPos,re4.wire.TRANS_COORD.LOCAL_TO_TRANS);
+			//re4.fw.debug(new Error(),"world:");
+			//re4.fw.debug(new Error(),list);			
+			list.worldToCameraThis(cam);
+			//re4.fw.debug(new Error(),"camera:");
+			//re4.fw.debug(new Error(),list);
+			list.cameraToPerspectiveThis(cam);
+			//re4.fw.debug(new Error(),"perspective:");
+			//re4.fw.debug(new Error(),list);
+			list.perspectiveToScreenThis(cam);
+			//re4.fw.debug(new Error(),"screen:");
+			//re4.fw.debug(new Error(),list);
+			list.drawWireTo ( screen ,re4.vm.Screen.BUFFER_SELECT.SECONDARY);
+			screen.flipDisplay ( );
+			
+			
+		}
+		var interval=setInterval(main,500);
+
+		//main();
+		//main();
+
+		
+
+
+	}
+	catch (e)
+	{
+		re4.fw.debug(e,"single-3d-triangle debug");
+		throw e;
+	}
+		
+	</script>
+
+
+
+</body>
+
+</html>
